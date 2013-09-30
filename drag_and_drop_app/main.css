@@ -1,0 +1,12 @@
+#drop_file {
+    width: 300px;
+    height: 70px;
+    border: dashed #CCC 2px;
+    border-radius: 5px;
+    color: #777;
+}
+
+#list {
+    width: 450px;
+    display: block;
+}
