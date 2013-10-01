@@ -28,9 +28,9 @@ IMAGESPROCESSING = (function() {
 
         var files         = event.dataTransfer.files,       // Get list drag file 
             i             = files.length - 1,                // Count drag file
-            reader        = undefined,                       /* This object provide functionality upload files method dra and drop.
+            reader,                                          /* This object provide functionality upload files method dra and drop.
                                                                 This object allow in asynchronus read files. */
-            arrayFiles    = undefined,                       // List object file
+            arrayFiles,                                      // List object file
             containerList = document.getElementById('list'), // Container for a list images
             img;
 
@@ -42,28 +42,46 @@ IMAGESPROCESSING = (function() {
             // Create object after loading page
             reader.onload = (function(file) {
                 return function(e) {
-                    // Create element img
-                    img        = document.createElement("img");
-                    // Append src in object img 
-                    img.src    = e.target.result;
-                    // Append width in object img
-                    img.width  = settings.width;
-                    // Append height in object img
-                    img.height = settings.height;
-                    // Append node end of list child
-                    containerList.appendChild(img);
+                    _thumbnail(e, containerList);
                 };
             })(arrayFiles);
             // Create object img and set src content get for FileReader
             reader.readAsDataURL(arrayFiles);
 
-            i -= 1;
+            i--;
         } while(i >= 0);
     };
 
+    var _thumbnail = function(e, containerList) {
+        var canvas = document.createElement('canvas'), // Create new element canvas
+            img    = document.createElement('img'),    // Create ne element img
+            ctx,                                       // Define drawing mode on canvas !!!!!!Określa sposob malownaia na canvas
+            dataUrl,                                   // Create drop content canvas and save. Finnaly we get url
+            newImage = document.createElement('img')   // Create new element image
+            link = document.createElement('a');        // Create new element a
+
+        img.src = e.target.result;
+        
+        /* Append attribut in link */
+        link.href = img.src;
+        /* Create image */
+        canvas.width  = settings.width;  // Append width in object canvas
+        canvas.height = settings.height; // Append height in objct canvas
+        ctx           = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Get image and draw canvas
+        dataUrl       = canvas.toDataURL();
+        newImage.src  = dataUrl; // assign dataUrl to attribute src new image
+
+        link.appendChild(newImage);      // Append element newImage to link
+        containerList.appendChild(link); // Append node end of list child
+     }
+
     return {
-        initialize: function(id) {
-            var drop = document.getElementById(id);
+        initialize: function() {
+            var drop        = document.getElementById(arguments[0]);
+                setSettings = settings.idContainerList; // Append argument in object settings
+
+            setSettings = arguments[1];
 
             /* This elements catch event dragover and drop
                Event dragover ocurs when user drags file over the element.
@@ -75,4 +93,4 @@ IMAGESPROCESSING = (function() {
     };
 })();
 
-IMAGESPROCESSING.initialize('drop_file');
+IMAGESPROCESSING.initialize('drop_file', 'list');
