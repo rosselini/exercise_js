@@ -23,7 +23,7 @@ IMAGESPROCESSING = (function() {
     };
 
     // Method drop
-    var _handleDropOver = function(event) {
+    var _handleDropOver = function(event) {console.time('timeName');
         _stop(event);
 
         var files         = event.dataTransfer.files,       // Get list drag file 
@@ -55,7 +55,7 @@ IMAGESPROCESSING = (function() {
     var _thumbnail = function(e, containerList) {
         var canvas = document.createElement('canvas'), // Create new element canvas
             img    = document.createElement('img'),    // Create ne element img
-            ctx,                                       // Define drawing mode on canvas !!!!!!Określa sposob malownaia na canvas
+            ctx,                                       // Define drawing mode on canvas
             dataUrl,                                   // Create drop content canvas and save. Finnaly we get url
             newImage = document.createElement('img')   // Create new element image
             link = document.createElement('a');        // Create new element a
