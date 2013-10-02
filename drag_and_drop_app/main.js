@@ -23,33 +23,30 @@ IMAGESPROCESSING = (function() {
     };
 
     // Method drop
-    var _handleDropOver = function(event) {console.time('timeName');
+    var _handleDropOver = function(event, idList) {
         _stop(event);
 
         var files         = event.dataTransfer.files,       // Get list drag file 
-            i             = files.length - 1,                // Count drag file
             reader,                                          /* This object provide functionality upload files method dra and drop.
                                                                 This object allow in asynchronus read files. */
-            arrayFiles,                                      // List object file
-            containerList = document.getElementById('list'), // Container for a list images
+            objectFiles,                                      // List object file
+            containerList = document.getElementById(idList), // Container for a list images
             img;
 
-        do {
+        // converts arguments into an array
+        objectToArray = Array.prototype.slice.apply(files);
+
+        objectToArray.forEach(function(entry) {
             reader = new FileReader();
 
-            arrayFiles = files[i];
-
-            // Create object after loading page
-            reader.onload = (function(file) {
+            reader.onload = (function() {
                 return function(e) {
                     _thumbnail(e, containerList);
                 };
-            })(arrayFiles);
+            })();
             // Create object img and set src content get for FileReader
-            reader.readAsDataURL(arrayFiles);
-
-            i--;
-        } while(i >= 0);
+            reader.readAsDataURL(entry);
+        });
     };
 
     var _thumbnail = function(e, containerList) {
@@ -77,18 +74,16 @@ IMAGESPROCESSING = (function() {
      }
 
     return {
-        initialize: function() {
-            var drop        = document.getElementById(arguments[0]);
-                setSettings = settings.idContainerList; // Append argument in object settings
-
-            setSettings = arguments[1];
+        initialize: function(idDrop, idList) {
+            var drop                     = document.getElementById(idDrop);
+                settings.idContainerList = idList; // Append argument in object settings
 
             /* This elements catch event dragover and drop
                Event dragover ocurs when user drags file over the element.
                Event drop ocurs when user drop file on the element.
             */
             drop.addEventListener('dragover', _handleDragOver, false);
-            drop.addEventListener('drop', _handleDropOver, false);
+            drop.addEventListener('drop', function() {_handleDropOver(event, idList)}, false);
         }
     };
 })();
