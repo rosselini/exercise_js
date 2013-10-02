@@ -55,7 +55,7 @@ IMAGESPROCESSING = (function() {
             img    = document.createElement('img'),    // Create ne element img
             ctx,                                       // Define drawing mode on canvas
             dataUrl,                                   // Create drop content canvas and save. Finnaly we get url
-            newImage = document.createElement('img')   // Create new element image
+            newImage = document.createElement('img'),  // Create new element image
             link = document.createElement('a');        // Create new element a
 
         img.src = e.target.result;
@@ -72,7 +72,7 @@ IMAGESPROCESSING = (function() {
 
         link.appendChild(newImage);      // Append element newImage to link
         containerList.appendChild(link); // Append node end of list child
-     }
+     };
 
     return {
         initialize: function(idDrop, idList) {
@@ -83,7 +83,7 @@ IMAGESPROCESSING = (function() {
                Event drop ocurs when user drop file on the element.
             */
             drop.addEventListener('dragover', _handleDragOver, false);
-            drop.addEventListener('drop', function() {_handleDropOver(event, idList)}, false);
+            drop.addEventListener('drop', function() {_handleDropOver(event, idList);}, false);
         }
     };
 })();
