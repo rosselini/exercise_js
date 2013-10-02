@@ -30,8 +30,9 @@ IMAGESPROCESSING = (function() {
             reader,                                          /* This object provide functionality upload files method dra and drop.
                                                                 This object allow in asynchronus read files. */
             objectFiles,                                      // List object file
-            containerList = document.getElementById(idList), // Container for a list images
+            
             img;
+            containerList = document.getElementById(idList); // Container for a list images
 
         // converts arguments into an array
         objectToArray = Array.prototype.slice.apply(files);
@@ -41,7 +42,7 @@ IMAGESPROCESSING = (function() {
 
             reader.onload = (function() {
                 return function(e) {
-                    _thumbnail(e, containerList);
+                    _thumbnail(e);
                 };
             })();
             // Create object img and set src content get for FileReader
@@ -49,7 +50,7 @@ IMAGESPROCESSING = (function() {
         });
     };
 
-    var _thumbnail = function(e, containerList) {
+    var _thumbnail = function(e) {
         var canvas = document.createElement('canvas'), // Create new element canvas
             img    = document.createElement('img'),    // Create ne element img
             ctx,                                       // Define drawing mode on canvas
@@ -75,8 +76,7 @@ IMAGESPROCESSING = (function() {
 
     return {
         initialize: function(idDrop, idList) {
-            var drop                     = document.getElementById(idDrop);
-                settings.idContainerList = idList; // Append argument in object settings
+            var drop = document.getElementById(idDrop);
 
             /* This elements catch event dragover and drop
                Event dragover ocurs when user drags file over the element.
