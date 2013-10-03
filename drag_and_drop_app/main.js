@@ -52,7 +52,10 @@ IMAGESPROCESSING = (function() {
             ctx,                                       // Define drawing mode on canvas
             dataUrl,                                   // Create drop content canvas and save. Finnaly we get url
             newImage = document.createElement('img'),  // Create new element image
-            link = document.createElement('a');        // Create new element a
+            link = document.createElement('a'),        // Create new element a
+            scale,
+            newWidth,
+            newHeight;
 
         img.src = e.target.result;
         
@@ -65,14 +68,14 @@ IMAGESPROCESSING = (function() {
 
         // scale save proportion
         if(img.width > img.height) {
-            var f = img.width / img.height;
-            var newWidth = canvas.height * f;
+            scale = img.width / img.height;
+            newWidth = canvas.height * f;
 
             ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, newWidth, canvas.height);
         } else {
             console.log("msg")
-            var f = img.height / img.width;
-            var newHeight = canvas.width * f;
+            scale = img.height / img.width;
+            newHeight = canvas.width * f;
 
             ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, newHeight);
         }
