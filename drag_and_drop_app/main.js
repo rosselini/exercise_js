@@ -23,14 +23,13 @@ IMAGESPROCESSING = (function() {
     };
 
     // Method drop
-    var _handleDropOver = function(event, idList) {
+    var _handleDropOver = function(idList, event) {
         _stop(event);
 
         var files         = event.dataTransfer.files,       // Get list drag file 
             reader,                                          /* This object provide functionality upload files method dra and drop.
                                                                 This object allow in asynchronus read files. */
             objectFiles,                                      // List object file
-            
             img;
             containerList = document.getElementById(idList); // Container for a list images
 
@@ -40,19 +39,16 @@ IMAGESPROCESSING = (function() {
         objectToArray.forEach(function(entry) {
             reader = new FileReader();
 
-            reader.onload = (function() {
-                return function(e) {
-                    _thumbnail(e);
-                };
-            })();
+            reader.onload = _thumbnail.bind(this);
             // Create object img and set src content get for FileReader
             reader.readAsDataURL(entry);
         });
     };
 
     var _thumbnail = function(e) {
+        console.log(e)
         var canvas = document.createElement('canvas'), // Create new element canvas
-            img    = document.createElement('img'),    // Create ne element img
+            img    = new Image(),    // Create ne element img
             ctx,                                       // Define drawing mode on canvas
             dataUrl,                                   // Create drop content canvas and save. Finnaly we get url
             newImage = document.createElement('img'),  // Create new element image
@@ -66,7 +62,21 @@ IMAGESPROCESSING = (function() {
         canvas.width  = settings.width;  // Append width in object canvas
         canvas.height = settings.height; // Append height in objct canvas
         ctx           = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Get image and draw canvas
+
+        // scale save proportion
+        if(img.width > img.height) {
+            var f = img.width / img.height;
+            var newWidth = canvas.height * f;
+
+            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, newWidth, canvas.height);
+        } else {
+            console.log("msg")
+            var f = img.height / img.width;
+            var newHeight = canvas.width * f;
+
+            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, newHeight);
+        }
+        //ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Get image and draw canvas
         dataUrl       = canvas.toDataURL();
         newImage.src  = dataUrl; // assign dataUrl to attribute src new image
 
@@ -83,7 +93,7 @@ IMAGESPROCESSING = (function() {
                Event drop ocurs when user drop file on the element.
             */
             drop.addEventListener('dragover', _handleDragOver, false);
-            drop.addEventListener('drop', function() {_handleDropOver(event, idList);}, false);
+            drop.addEventListener('drop', _handleDropOver.bind(this, idList), false);
         }
     };
 })();
