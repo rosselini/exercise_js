@@ -73,7 +73,6 @@ IMAGESPROCESSING = (function() {
 
             ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, newWidth, canvas.height);
         } else {
-            console.log("msg")
             scale = img.height / img.width;
             newHeight = canvas.width * f;
 
